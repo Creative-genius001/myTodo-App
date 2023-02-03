@@ -36,7 +36,7 @@ mongoose
 		console.error((err) => err.message);
 	});
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
 	console.log(
 		"server is running:listening on port " + port,
 	);

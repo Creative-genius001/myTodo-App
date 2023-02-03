@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
 		setError("");
 		let res = await axios({
 			method: "post",
-			url: "http://localhost:5000/signup",
+			url: "https://todo-app-z5ff.onrender.com/signup",
 			data: { name, password, email },
 			withCredentials: false,
 		}).catch((res) => {
@@ -46,7 +46,7 @@ export function AuthProvider({ children }) {
 		setError("");
 		let res = await axios({
 			method: "post",
-			url: "http://localhost:5000/login",
+			url: "https://todo-app-z5ff.onrender.com/login",
 			data: { email, password },
 			withCredentials: false,
 		}).catch((res) => {

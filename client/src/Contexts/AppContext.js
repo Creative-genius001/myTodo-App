@@ -21,9 +21,12 @@ export function AppContextProvider({ children }) {
 		);
 		if (id === null) {
 			await axios
-				.post("http://localhost:5000/get", {
-					userid,
-				})
+				.post(
+					"https://todo-app-z5ff.onrender.com/get",
+					{
+						userid,
+					},
+				)
 				.then((res) => {
 					setTasks(res.data);
 				})
@@ -31,9 +34,12 @@ export function AppContextProvider({ children }) {
 		} else {
 			let userid = id;
 			await axios
-				.post("http://localhost:5000/get", {
-					userid,
-				})
+				.post(
+					"https://todo-app-z5ff.onrender.com/get",
+					{
+						userid,
+					},
+				)
 				.then((res) => {
 					setTasks(res.data);
 				})
@@ -51,7 +57,8 @@ export function AppContextProvider({ children }) {
 				"content-type": "application/json",
 			},
 		};
-		let url = "http://localhost:5000/add";
+		let url =
+			"https://todo-app-z5ff.onrender.com/add";
 		let data = {
 			task: newTask,
 			userid,
@@ -77,7 +84,8 @@ export function AppContextProvider({ children }) {
 				"content-type": "application/json",
 			},
 		};
-		let url = "http://localhost:5000/complete";
+		let url =
+			"https://todo-app-z5ff.onrender.com/complete";
 		let data = {
 			id,
 			isCompleted,
@@ -102,7 +110,7 @@ export function AppContextProvider({ children }) {
 				"content-type": "application/json",
 			},
 		};
-		let url = `http://localhost:5000/update/${id}`;
+		let url = `https://todo-app-z5ff.onrender.com/${id}`;
 		let data = { task: newTask };
 		await axios.put(url, data, config);
 	};
@@ -111,7 +119,7 @@ export function AppContextProvider({ children }) {
 		await axios({
 			method: "delete",
 			data: { id },
-			url: "http://localhost:5000/delete",
+			url: "https://todo-app-z5ff.onrender.com/delete",
 		});
 	};
 
