@@ -1,10 +1,14 @@
 import React from "react";
 import { AuthContext } from "../Contexts/AuthContext";
-import { Link } from "react-router-dom";
+import {
+	Link,
+	useNavigate,
+} from "react-router-dom";
 import { useContext } from "react";
 import { useState } from "react";
 
 const Login = () => {
+	const navigate = useNavigate();
 	const { login, error } =
 		useContext(AuthContext);
 
@@ -13,9 +17,10 @@ const Login = () => {
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
-		try {
-			await login(email, password);
-		} catch (err) {}
+
+		let res = await login(email, password);
+
+		res = true ? navigate("/home") : "";
 	};
 
 	return (

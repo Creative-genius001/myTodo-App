@@ -69,6 +69,7 @@ export function AppContextProvider({ children }) {
 			.catch((err) =>
 				console.error("could not add the task!"),
 			);
+		document.location.reload(true);
 	};
 
 	const handleIsCompleted = async (
@@ -121,6 +122,7 @@ export function AppContextProvider({ children }) {
 			data: { id },
 			url: "https://todo-app-z5ff.onrender.com/delete",
 		});
+		document.location.reload(true);
 	};
 
 	return (

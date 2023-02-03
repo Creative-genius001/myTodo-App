@@ -3,15 +3,11 @@ import {
 	BsCheckCircleFill,
 } from "react-icons/bs";
 import { FiTrash2 } from "react-icons/fi";
-import React, {
-	useContext,
-	useEffect,
-	useState,
-} from "react";
+import React, { useContext } from "react";
 import { AppContext } from "../Contexts/AppContext";
 import { useNavigate } from "react-router-dom";
 
-const Task = () => {
+const Task = ({ tasks, setChange, change }) => {
 	const navigate = useNavigate();
 
 	const myStyle1 = {
@@ -22,16 +18,10 @@ const Task = () => {
 		textDecoration: "line-through",
 		marginLeft: "0.5rem",
 	};
-	const [change, setChange] = useState(false);
 
-	const {
-		tasks,
-		getTasks,
-		handleIsCompleted,
-		handleDelete,
-	} = useContext(AppContext);
+	const { handleIsCompleted, handleDelete } =
+		useContext(AppContext);
 
-	useEffect(() => getTasks, [change]);
 	const updateTask = (id) => {
 		navigate(`/home/updatetask/${id}`);
 	};

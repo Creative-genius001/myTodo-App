@@ -1,16 +1,25 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import {
+	Link,
+	useNavigate,
+} from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../Contexts/AuthContext";
 
 const Signup = () => {
+	const navigate = useNavigate();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [username, setUsername] = useState("");
 
 	const handleSignup = async (e) => {
 		e.preventDefault();
-		await Signup(username, password, email);
+		let res = await Signup(
+			username,
+			password,
+			email,
+		);
+		res = true ? navigate("/home") : "";
 	};
 	const { Signup, error } =
 		useContext(AuthContext);

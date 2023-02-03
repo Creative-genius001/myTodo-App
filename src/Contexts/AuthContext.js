@@ -9,7 +9,7 @@ export const AuthContext = createContext();
 export function AuthProvider({ children }) {
 	const [name, setName] = useState("");
 	const [userid, setUserid] = useState("");
-	const [error, setError] = useState();
+	const [error, setError] = useState("");
 
 	const Signup = async (
 		name,
@@ -39,6 +39,7 @@ export function AuthProvider({ children }) {
 
 			setName(res.data.name);
 			setUserid(res.data.id);
+			return true;
 		}
 	};
 
@@ -65,7 +66,7 @@ export function AuthProvider({ children }) {
 			);
 			setName(res.data.name);
 			setUserid(res.data.id);
-			window.location = "/home";
+			return true;
 		}
 	};
 

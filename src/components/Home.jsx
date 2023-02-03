@@ -17,7 +17,8 @@ import {
 const Menu = () => {
 	const navigate = useNavigate();
 
-	const { tasks } = useContext(AppContext);
+	const { tasks, getTasks } =
+		useContext(AppContext);
 	const {
 		logout,
 		name,
@@ -25,6 +26,8 @@ const Menu = () => {
 	} = useContext(AuthContext);
 	const [active, setActive] = useState(false);
 	const [addTask, setAddTask] = useState(false);
+	const [change, setChange] = useState(false);
+
 	const hide = {
 		left: -300,
 		transition: "0.8s ease",
@@ -41,7 +44,8 @@ const Menu = () => {
 
 	useEffect(() => {
 		checkUserAlreadyLoggedIn();
-	});
+		getTasks();
+	}, [change]);
 
 	return (
 		<>
@@ -93,7 +97,11 @@ const Menu = () => {
 						Welcome, <span>{name}!</span>
 					</h1>
 				</div>
-				<Task tasks={tasks} />
+				<Task
+					tasks={tasks}
+					setChange={setChange}
+					change={change}
+				/>
 				<Link to="/home/addtask">
 					<BsFillPlusCircleFill
 						onClick={() => setAddTask(true)}
