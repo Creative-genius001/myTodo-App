@@ -13,41 +13,27 @@ export function AppContextProvider({ children }) {
 
 	const [name, setName] = useState("");
 	const [tasks, setTasks] = useState([]);
-	const [newTask, setNewTask] = useState("");
+	const BASE_URL = "http://localhost:5000";
 
 	const getTasks = async () => {
 		let { id } = JSON.parse(
 			localStorage.getItem("jwt"),
 		);
-		if (id === null) {
-			await axios
-				.post(
-					"https://todo-app-z5ff.onrender.com/get",
-					{
-						userid,
-					},
-				)
-				.then((res) => {
-					setTasks(res.data);
-				})
-				.catch("could not get tasks");
-		} else {
-			let userid = id;
-			await axios
-				.post(
-					"https://todo-app-z5ff.onrender.com/get",
-					{
-						userid,
-					},
-				)
-				.then((res) => {
-					setTasks(res.data);
-				})
-				.catch("could not get tasks");
-		}
+		if (id === null) return;
+		let userid = id;
+		await axios
+			.post(`${BASE_URL}/get`, {
+				userid,
+			})
+			.then((res) => {
+				setTasks(res.data);
+			})
+			.catch((err) => {
+				throw Error(err.error);
+			});
 	};
 
-	const handleNewTask = async () => {
+	const handleNewTask = async (task) => {
 		let { jwt } = JSON.parse(
 			localStorage.getItem("jwt"),
 		);
@@ -57,19 +43,17 @@ export function AppContextProvider({ children }) {
 				"content-type": "application/json",
 			},
 		};
-		let url =
-			"https://todo-app-z5ff.onrender.com/add";
+		let url = `${BASE_URL}/add`;
 		let data = {
-			task: newTask,
+			task,
 			userid,
 		};
 		await axios
 			.post(url, data, config)
 			.then()
-			.catch((err) =>
-				console.error("could not add the task!"),
-			);
-		document.location.reload(true);
+			.catch((err) => {
+				throw Error(err.error);
+			});
 	};
 
 	const handleIsCompleted = async (
@@ -85,8 +69,7 @@ export function AppContextProvider({ children }) {
 				"content-type": "application/json",
 			},
 		};
-		let url =
-			"https://todo-app-z5ff.onrender.com/complete";
+		let url = `${BASE_URL}/complete`;
 		let data = {
 			id,
 			isCompleted,
@@ -101,7 +84,7 @@ export function AppContextProvider({ children }) {
 			);
 	};
 
-	const handleUpdateTask = async (id) => {
+	const handleUpdateTask = async (id, task) => {
 		let { jwt } = JSON.parse(
 			localStorage.getItem("jwt"),
 		);
@@ -111,18 +94,21 @@ export function AppContextProvider({ children }) {
 				"content-type": "application/json",
 			},
 		};
-		let url = `https://todo-app-z5ff.onrender.com/${id}`;
-		let data = { task: newTask };
+		let url = `${BASE_URL}/${id}`;
+		let data = { task };
 		await axios.put(url, data, config);
 	};
 
 	const handleDelete = async (id) => {
-		await axios({
-			method: "delete",
-			data: { id },
-			url: "https://todo-app-z5ff.onrender.com/delete",
-		});
-		document.location.reload(true);
+		try {
+			await axios({
+				method: "delete",
+				data: { id },
+				url: `${BASE_URL}/delete`,
+			});
+		} catch (error) {
+			throw Error("Error! Could not delete.");
+		}
 	};
 
 	return (
@@ -133,8 +119,6 @@ export function AppContextProvider({ children }) {
 				setName,
 				tasks,
 				handleNewTask,
-				setNewTask,
-				newTask,
 				getTasks,
 				name,
 				handleIsCompleted,

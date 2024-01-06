@@ -5,9 +5,10 @@ import {
 } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
-	let checked = localStorage.getItem("jwt");
+	const isLoggedIn =
+		localStorage.getItem("isLoggedIn");
 	const location = useLocation();
-	if (!checked) {
+	if (!isLoggedIn) {
 		return (
 			<Navigate
 				to="/login"

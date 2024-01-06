@@ -10,6 +10,7 @@ export function AuthProvider({ children }) {
 	const [name, setName] = useState("");
 	const [userid, setUserid] = useState("");
 	const [error, setError] = useState("");
+	const BASE_URL = "http://localhost:5000";
 
 	const Signup = async (
 		name,
@@ -19,7 +20,7 @@ export function AuthProvider({ children }) {
 		setError("");
 		let res = await axios({
 			method: "post",
-			url: "https://todo-app-z5ff.onrender.com/signup",
+			url: `${BASE_URL}/signup`,
 			data: { name, password, email },
 			withCredentials: false,
 		}).catch((res) => {
@@ -45,29 +46,30 @@ export function AuthProvider({ children }) {
 
 	const login = async (email, password) => {
 		setError("");
-		let res = await axios({
+		await axios({
 			method: "post",
-			url: "https://todo-app-z5ff.onrender.com/login",
+			url: `${BASE_URL}/login`,
 			data: { email, password },
 			withCredentials: false,
-		}).catch((res) => {
-			setError(
-				(currErr) => res.response.data.error,
-			);
-		});
-		if (error == "") {
-			window.localStorage.setItem(
-				"jwt",
-				JSON.stringify(res.data),
-			);
-			window.localStorage.setItem(
-				"isLoggedIn",
-				"true",
-			);
-			setName(res.data.name);
-			setUserid(res.data.id);
-			return true;
-		}
+		})
+			.then((res) => {
+				console.log(res.data);
+				window.localStorage.setItem(
+					"jwt",
+					JSON.stringify(res.data),
+				);
+				window.localStorage.setItem(
+					"isLoggedIn",
+					"true",
+				);
+
+				setName(res.data.name);
+				setUserid(res.data.id);
+				return true;
+			})
+			.catch(({ response }) => {
+				setError(response.data.error);
+			});
 	};
 
 	const checkUserAlreadyLoggedIn = async () => {

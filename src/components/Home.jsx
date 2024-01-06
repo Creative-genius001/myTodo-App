@@ -9,10 +9,8 @@ import { BsFillPlusCircleFill } from "react-icons/bs";
 import { useState, useContext } from "react";
 import { AppContext } from "../Contexts/AppContext";
 import { AuthContext } from "../Contexts/AuthContext";
-import {
-	Link,
-	useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import AddTask from "./AddTask";
 
 const Menu = () => {
 	const navigate = useNavigate();
@@ -26,7 +24,6 @@ const Menu = () => {
 	} = useContext(AuthContext);
 	const [active, setActive] = useState(false);
 	const [addTask, setAddTask] = useState(false);
-	const [change, setChange] = useState(false);
 
 	const hide = {
 		left: -300,
@@ -45,10 +42,17 @@ const Menu = () => {
 	useEffect(() => {
 		checkUserAlreadyLoggedIn();
 		getTasks();
-	}, [change]);
+	});
 
 	return (
 		<>
+			{addTask && (
+				<AddTask
+					closeAddTaskComponent={() =>
+						setAddTask(false)
+					}
+				/>
+			)}
 			<div className="container relative">
 				<div
 					style={active ? show : hide}
@@ -93,21 +97,16 @@ const Menu = () => {
 							onClick={() => setActive(true)}
 						/>
 					</div>
-					<h1 className="font-bold text-blue-900 text-[1.8rem] leading-tight">
+					<h1 className="font-semibold text-blue-900 text-[1.8rem] leading-tight">
 						Welcome, <span>{name}!</span>
 					</h1>
 				</div>
-				<Task
-					tasks={tasks}
-					setChange={setChange}
-					change={change}
+				<Task tasks={tasks} />
+
+				<BsFillPlusCircleFill
+					onClick={() => setAddTask(true)}
+					className="absolute hover:animate-bounce text-blue-700 text-[3.4rem] right-8 bottom-10 z-50 cursor-pointer drop-shadow-lg"
 				/>
-				<Link to="/home/addtask">
-					<BsFillPlusCircleFill
-						onClick={() => setAddTask(true)}
-						className="absolute hover:animate-bounce text-blue-700 text-[3.4rem] right-8 bottom-10 z-50 cursor-pointer drop-shadow-lg"
-					/>
-				</Link>
 			</div>
 			)
 		</>

@@ -10,10 +10,9 @@ import {
 } from "react-router-dom";
 import Home from "./components/Home";
 import { AppContextProvider } from "./Contexts/AppContext";
-import AddTask from "./components/AddTask";
 import UpdateTask from "./components/UpdateTask";
 import { AuthProvider } from "./Contexts/AuthContext";
-import React, { useContext } from "react";
+import React from "react";
 import ProtectedRoute from "./util/ProtectedRoute";
 
 function App() {
@@ -28,7 +27,7 @@ function App() {
 						<Route
 							path="/"
 							element={
-								isLoggedIn == "true" ? (
+								isLoggedIn === "true" ? (
 									<Home />
 								) : (
 									<Users />
@@ -42,7 +41,7 @@ function App() {
 						<Route
 							path="/login"
 							element={
-								isLoggedIn == "true" ? (
+								isLoggedIn === "true" ? (
 									<Home />
 								) : (
 									<Login />
@@ -57,10 +56,6 @@ function App() {
 									<Home />
 								</ProtectedRoute>
 							}
-						/>
-						<Route
-							path="/home/addtask"
-							element={<AddTask />}
 						/>
 						<Route
 							path="/home/updatetask/:id"
