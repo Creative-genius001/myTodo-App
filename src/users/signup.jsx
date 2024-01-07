@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
 	Link,
 	useNavigate,
 } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../Contexts/AuthContext";
+import Loader from "../components/Loader";
 
 const Signup = () => {
 	const navigate = useNavigate();
@@ -14,14 +15,15 @@ const Signup = () => {
 
 	const handleSignup = async (e) => {
 		e.preventDefault();
-		let res = await Signup(
+		const response = await Signup(
 			username,
 			password,
 			email,
 		);
-		res = true ? navigate("/home") : "";
+		if (!response) return;
+		navigate("/login");
 	};
-	const { Signup, error } =
+	const { Signup, error, pending } =
 		useContext(AuthContext);
 
 	return (
@@ -96,9 +98,10 @@ const Signup = () => {
 						</Link>
 					</p>
 					<button
+						disabled={pending ? true : false}
 						type="submit"
-						className="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-						SignUp
+						className="text-white block bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm w-full mt-8 px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+						{pending ? <Loader /> : "Signup"}
 					</button>
 				</form>
 			</div>

@@ -9,8 +9,10 @@ export const AuthContext = createContext();
 export function AuthProvider({ children }) {
 	const [name, setName] = useState("");
 	const [userid, setUserid] = useState("");
+	const [pending, setPending] = useState(false);
 	const [error, setError] = useState("");
-	const BASE_URL = "http://localhost:5000";
+	const BASE_URL =
+		"https://todo-app-z5ff.onrender.com"; //https://todo-app-z5ff.onrender.comhttp://localhost:5000
 
 	const Signup = async (
 		name,
@@ -18,17 +20,36 @@ export function AuthProvider({ children }) {
 		email,
 	) => {
 		setError("");
-		let res = await axios({
-			method: "post",
-			url: `${BASE_URL}/signup`,
-			data: { name, password, email },
-			withCredentials: false,
-		}).catch((res) => {
-			setError(
-				(currErr) => res.response.data.error,
-			);
-		});
-		if (error === "") {
+		setPending(true);
+		try {
+			const res = await axios({
+				method: "post",
+				url: `${BASE_URL}/signup`,
+				data: { name, password, email },
+				withCredentials: false,
+			});
+			if (!res) {
+				setPending(false);
+				setError("Server Error");
+			}
+			setPending(false);
+			return res.data;
+		} catch ({ response }) {
+			setPending(false);
+			setError(response.data.error);
+		}
+	};
+
+	const login = async (email, password) => {
+		setError("");
+		setPending(true);
+		try {
+			const res = await axios({
+				method: "post",
+				url: `${BASE_URL}/login`,
+				data: { email, password },
+				withCredentials: false,
+			});
 			window.localStorage.setItem(
 				"jwt",
 				JSON.stringify(res.data),
@@ -40,36 +61,12 @@ export function AuthProvider({ children }) {
 
 			setName(res.data.name);
 			setUserid(res.data.id);
-			return true;
+			setPending(false);
+			return res.data;
+		} catch ({ response }) {
+			setPending(false);
+			setError(response.data.error);
 		}
-	};
-
-	const login = async (email, password) => {
-		setError("");
-		await axios({
-			method: "post",
-			url: `${BASE_URL}/login`,
-			data: { email, password },
-			withCredentials: false,
-		})
-			.then((res) => {
-				console.log(res.data);
-				window.localStorage.setItem(
-					"jwt",
-					JSON.stringify(res.data),
-				);
-				window.localStorage.setItem(
-					"isLoggedIn",
-					"true",
-				);
-
-				setName(res.data.name);
-				setUserid(res.data.id);
-				return true;
-			})
-			.catch(({ response }) => {
-				setError(response.data.error);
-			});
 	};
 
 	const checkUserAlreadyLoggedIn = async () => {
@@ -97,10 +94,12 @@ export function AuthProvider({ children }) {
 				checkUserAlreadyLoggedIn,
 				error,
 				Signup,
+				setError,
 				name,
 				logout,
 				login,
 				userid,
+				pending,
 			}}>
 			{children}
 		</AuthContext.Provider>

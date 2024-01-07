@@ -11,9 +11,11 @@ export const AppContext = createContext();
 export function AppContextProvider({ children }) {
 	const { userid } = useContext(AuthContext);
 
+	//https://todo-app-z5ff.onrender.comhttp://localhost:5000 
+
 	const [name, setName] = useState("");
 	const [tasks, setTasks] = useState([]);
-	const BASE_URL = "http://localhost:5000";
+	const BASE_URL = "https://todo-app-z5ff.onrender.com";
 
 	const getTasks = async () => {
 		let { id } = JSON.parse(

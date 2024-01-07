@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AuthContext } from "../Contexts/AuthContext";
 import {
 	Link,
@@ -6,21 +6,20 @@ import {
 } from "react-router-dom";
 import { useContext } from "react";
 import { useState } from "react";
+import Loader from "../components/Loader";
 
 const Login = () => {
 	const navigate = useNavigate();
-	const { login, error } =
+	const { login, error, pending } =
 		useContext(AuthContext);
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
-	const handleLogin = async (e) => {
-		e.preventDefault();
-
-		let res = await login(email, password);
-
-		res = true ? navigate("/home") : "";
+	const handleLogin = async () => {
+		const response = await login(email, password);
+		if (!response) return;
+		navigate("/home");
 	};
 
 	return (
@@ -29,7 +28,7 @@ const Login = () => {
 				TodoList App
 			</h1>
 			<div className="signup-container">
-				<form onSubmit={handleLogin}>
+				<form>
 					{error ? (
 						<span className="error-bar">
 							{error}
@@ -76,15 +75,16 @@ const Login = () => {
 					<p className="text-gray-900 mb-3">
 						Don't have an account?
 						<Link to="/signup">
-							<span className="text-blue-700 cursor-pointer hover:underline">
+							<span className="text-blue-700 ml-2 cursor-pointer hover:underline">
 								Signup
 							</span>
 						</Link>
 					</p>
 					<button
-						type="submit"
-						className="text-white block bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-						Login
+						onClick={handleLogin}
+						disabled={pending ? true : false}
+						className="text-white block bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm w-full mt-8 px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+						{pending ? <Loader /> : "Login"}
 					</button>
 				</form>
 			</div>
