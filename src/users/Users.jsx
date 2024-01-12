@@ -13,7 +13,7 @@ const Users = () => {
 				activities all through the day.
 			</p>
 			<Link
-				to="/signup"
+				to="/login"
 				className="text-white block bg-blue-700 hover:bg-blue-800  font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
 				Continue
 			</Link>

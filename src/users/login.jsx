@@ -88,6 +88,9 @@ const Login = () => {
 					</button>
 				</form>
 			</div>
+			<p className="mt-8 text-sm">
+				Email: chris@info.com ; Password: 00000000
+			</p>
 		</div>
 	);
 };
