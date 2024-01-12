@@ -1,4 +1,7 @@
-import React, { useContext } from "react";
+import React, {
+	useContext,
+	useState,
+} from "react";
 import {
 	MdOutlineCancel,
 	MdOutlineKeyboardArrowUp,
@@ -13,14 +16,13 @@ import { AppContext } from "../Contexts/AppContext";
 const UpdateTask = () => {
 	const navigate = useNavigate();
 	const params = useParams();
-	const {
-		handleUpdateTask,
-		setNewTask,
-	} = useContext(AppContext);
+	const [newTask, setNewTask] = useState("");
+	const { handleUpdateTask } =
+		useContext(AppContext);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		handleUpdateTask(params.id);
+		handleUpdateTask(params.id, newTask);
 		navigate("/home");
 	};
 

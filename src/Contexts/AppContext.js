@@ -11,11 +11,11 @@ export const AppContext = createContext();
 export function AppContextProvider({ children }) {
 	const { userid } = useContext(AuthContext);
 
-	//https://todo-app-z5ff.onrender.comhttp://localhost:5000 
+	//https://todo-app-z5ff.onrender.comhttp://localhost:5000
 
 	const [name, setName] = useState("");
 	const [tasks, setTasks] = useState([]);
-	const BASE_URL = "https://todo-app-z5ff.onrender.com";
+	const BASE_URL = "http://localhost:5000";
 
 	const getTasks = async () => {
 		let { id } = JSON.parse(
@@ -96,9 +96,13 @@ export function AppContextProvider({ children }) {
 				"content-type": "application/json",
 			},
 		};
-		let url = `${BASE_URL}/${id}`;
+		let url = `${BASE_URL}/update/${id}`;
 		let data = { task };
-		await axios.put(url, data, config);
+		try {
+			await axios.put(url, data, config);
+		} catch (error) {
+			throw Error("Updating Error", error);
+		}
 	};
 
 	const handleDelete = async (id) => {

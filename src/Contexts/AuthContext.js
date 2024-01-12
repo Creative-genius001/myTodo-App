@@ -11,8 +11,7 @@ export function AuthProvider({ children }) {
 	const [userid, setUserid] = useState("");
 	const [pending, setPending] = useState(false);
 	const [error, setError] = useState("");
-	const BASE_URL =
-		"https://todo-app-z5ff.onrender.com"; //https://todo-app-z5ff.onrender.comhttp://localhost:5000
+	const BASE_URL = "http://localhost:5000"; //https://todo-app-z5ff.onrender.comhttp://localhost:5000
 
 	const Signup = async (
 		name,

@@ -4,6 +4,7 @@ import {
 	BsCircle,
 	BsCheckCircleFill,
 } from "react-icons/bs";
+import { MdOutlineModeEdit } from "react-icons/md";
 import { FiTrash2 } from "react-icons/fi";
 import { AppContext } from "../Contexts/AppContext";
 
@@ -27,22 +28,18 @@ const TaskCard = ({ task, index }) => {
 
 	return (
 		<div
-			onDoubleClick={() => {
-				updateTask(task._id);
-			}}
 			key={index}
 			className="flex items-center justify-between rounded-2xl p-4 bg-white mb-2 hover:cursor-pointer">
-			<div className="flex items-center">
+			<div
+				onClick={() => {
+					handleIsCompleted(
+						task._id,
+						task.isCompleted,
+					);
+				}}
+				className="flex items-center min-w-[70%] max-w-[80%]">
 				{task.isCompleted ? (
-					<BsCheckCircleFill
-						onClick={() => {
-							handleIsCompleted(
-								task._id,
-								task.isCompleted,
-							);
-						}}
-						className="text-blue-700 cursor-pointer"
-					/>
+					<BsCheckCircleFill className="text-blue-700 cursor-pointer" />
 				) : (
 					<BsCircle
 						onClick={() => {
@@ -55,18 +52,28 @@ const TaskCard = ({ task, index }) => {
 					/>
 				)}
 				<span
+					className="leading-[20px]"
 					style={
 						task.isCompleted ? myStyle : myStyle1
 					}>
 					{task.task}
 				</span>
 			</div>
-			<FiTrash2
-				onClick={() => {
-					handleDelete(task._id);
-				}}
-				className="text-[#727171] text-[1.4rem]"
-			/>
+			<div className="flex justify-center items-center">
+				<MdOutlineModeEdit
+					onClick={() => {
+						updateTask(task._id, task.task);
+					}}
+					className="text-[1.7rem] mr-4 opacity-50"
+				/>
+
+				<FiTrash2
+					onClick={() => {
+						handleDelete(task._id);
+					}}
+					className="text-[#727171] text-[1.4rem]"
+				/>
+			</div>
 		</div>
 	);
 };
